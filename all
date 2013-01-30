@@ -1,0 +1,9 @@
+git clone git://git.projects.genivi.org/ipc/af_bus-linux.git
+git clone git://git.projects.genivi.org/ipc/af_bus-eglibc.git
+git clone git://git.projects.genivi.org/ipc/af_bus-dbus.git
+git clone git://git.projects.genivi.org/ipc/af_bus-tests.git	
+
+git clone git://git.projects.genivi.org/AudioManager.git
+git clone git://git.projects.genivi.org/layer_management.git
+git clone git://git.projects.genivi.org/dlt-daemon.git
+

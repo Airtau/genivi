@@ -1,0 +1,59 @@
+/***************************************************************************
+*
+* Copyright 2012 BMW Car IT GmbH
+*
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*        http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*
+****************************************************************************/
+/*!
+
+\page context Context
+
+The Layer Management Service is one of a number of components that have
+been identified in the Graphics Framework Component Model. The components
+that comprise the Graphics Framework are shown in the following diagram
+and summarized in the subsequent text.
+
+\image html ./doc/images/overall_component_model.png Overall Component Model
+\image latex ./doc/images/overall_component_model.png Overall Component Model
+
+The key components are the 2D Graphics API, 3D Graphics API and Window
+Management API.
+
+\section GraphicsApi2d 2D Graphics API
+
+The 2D Graphics API takes care of the rendering of 2D graphic primitives,
+like lines, squares, circles, polygons and splines. Furthermore it will
+handle skinned applications for OEM branding. On the other side it is possible
+to reuse that API as a rendering technology of the Layer Management Service.
+
+\section GraphicsApi3d 3D Graphics API
+
+The 3D Graphics API takes care of the rendering of 3D graphic primitives
+and supports blending operations for compositing effects. On the other side
+it is possible to reuse that API as a rendering and compositing technology
+of the Layer Management Service.
+
+\section windowsManagementApi Window Management API
+
+The window management API is used by applications to display their graphical
+content. The window management API must provide means to access these graphical
+application outputs for the Layer Management Service. This requirement is
+crucial for the Layer Management Service. The specific implementation of this
+access can have significant impact on the performance of the service. It
+should be implemented in such a way that no costly copy operations of graphic
+content are needed. In some cases this additionally poses requirements for
+graphics hardware or drivers.
+
+*/

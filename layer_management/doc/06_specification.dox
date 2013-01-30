@@ -1,0 +1,166 @@
+/***************************************************************************
+*
+* Copyright 2012 BMW Car IT GmbH
+*
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*        http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*
+****************************************************************************/
+/*!
+
+\page specification Specification
+
+\section componentStartup Component Startup
+
+This section describes the mechanisms to start the Layer Management Service
+component and the actions it takes.
+
+On startup the Layer Management Service shall perform the following tasks:
+
+\li Load and instantiate Communication and Rendering packages to be used.
+    These will typically create own threads internally. It must be possible
+    to load these at runtime in order to have maximum flexibility.
+\li Call start method on loaded packages
+\li Communication Packages will now typically wait for IPC Calls for creating
+    surfaces, layers etc and arranging themselves. Rendering packages will now
+    typically start rendering all known layers and their surfaces.
+
+\image html ./doc/images/layermanager_lifecycle.png LayerManagerService Lifecycle
+\image latex ./doc/images/layermanager_lifecycle.png LayerManagerService Lifecycle
+
+\section componentInterfaces Component Interfaces
+
+\subsection componentInterfacesOverview Overview
+
+This section describes the Communication interface (Inter Process Communication)
+between the Layer Management Service component and other components and external
+systems. This is the interface for other applications to communicate with the
+Layer Management. This is used to control the Layer Management Service. \ref designOverview
+describes internal programming interfaces and is only needed when extending
+the Layer Management Service with new communication mechanisms or renderers for
+new platforms. The IPC Message interfaces are described in \ref Commands.
+
+\subsection componentInterfacesConnectionPolicy Connection Policy
+
+The connection to the service is handled by the used communication packages and
+as such can not be discussed here generically. The connection policy must be
+described for each implementation of a communication package to be used.
+
+The list of methods defined in \ref componentInterfacesCommands is generic and must
+always be implemented in communication packages, additional functionality can be
+provided be individual communication implementations though.
+
+\subsection componentInterfacesCommands Commands
+
+The IPC Message interfaces are described in \ref Commands.
+
+\section componentInterfacesRequirements Requirements
+
+This section describes the non-functional requirements applicable to the Layer
+Management Service Component. The requirements are split into two groups: those
+directly met by the component and those where the component is supported by the
+operational infrastructure.
+
+\subsection componentInterfacesNonFunctionalRequirements Non-Functional Requirements
+
+\subsubsection graphic01 Requirement Graphic01: 2D / 3D content simultaneously
+
+The user wants to be able to arrange the view, e.g. in order to have a three
+dimensional map on the left side and lane guidance information on the right
+side.
+
+\subsubsection graphic02 Requirement Graphic02: Changing the application layout inside of a HMI system
+
+The user wants to be able to change the layout of the displayed applications of
+the HMI system. For example he sometimes wants to display In-Vehicle Information
+or Entertainment Details on the right side of a map displayed by the navigation
+system or vice versa. Furthermore - in dedicated situations - the content
+delivered by e.g. the rear view application while reversing has to be on top of
+other applications without losing menu content information provided by the HMI
+System.
+
+\subsubsection graphic03 Requirement Graphic03: Display navigation information on a second display
+
+Rear seat passenger wants to see current navigation relevant information, like
+map showing overview of current route, time and distance to destination and
+more.
+
+\subsubsection graphic04 Requirement Graphic04: Making screenshot of head unit display
+
+When performing evaluation of the system on bench or road test, tester might need to take
+a screenshot of the actual screen content.
+
+\subsubsection graphic05 Requirement Graphic05: Showing Additional Information on Top
+
+In some situations the user wants to display additional information on top of e.g. a map
+provided by the navigation system. This information may include:
+
+\li Points of interests
+\li Lane and distance information during reversing
+\li Pedestrian and obstacle distance during drive at night
+\li Speed limit information
+\li On Screen Display Menu Information
+
+\subsubsection graphic06 Requirement Graphic06: Top of market experience while watching different application-content and additional information.
+
+Today's HMI systems have to be integrate different applications depending on the
+end-user's need. Typical Applications are which have to be integrated are:
+
+\li Navigation application including 2D and 3D Map viewer
+\li Television and video
+\li Video content while reversing
+\li Graphical feedback while reversing
+\li Browsing the internet
+\li Entertainment Details
+\li Vehicle information
+\li Assistant information
+\li Interactive Vehicle Manual
+\li Telephony Application 
+
+Therefore the user wants to have a top of market experience while watching and using application content and assistant information, without any disturbance (frame drop, unsmooth displayed animations, response delay on interaction) of the displayed content of the HMI system.
+
+\subsubsection graphic07 Requirement Graphic07: Using different application content
+
+The needs of end-users regarding HMI systems can have a wide variety. Therefore they
+range from only listening to audio and watching on board vehicle information to watching
+video, browsing the Internet and using the navigation system simultaneously. Hence today's
+HMI systems have to integrate different applications depending on the end-user's needs.
+Typical Applications which have to be integrated are:
+
+\li Navigation application including 2D and 3D Map viewer
+\li Television and video
+\li Video content while reversing
+\li Graphical feedback while reversing
+\li Browsing the internet
+\li Entertainment Details
+\li Vehicle information
+\li Assistant information
+\li Interactive Vehicle Manual
+\li Telephony Application 
+
+The user wants to use these different applications on a HMI System in parallel.
+
+\subsubsection graphic08 Requirement Graphic08: Showing screen content of connected CE device
+
+User may want to connect smartphone device and see screen content of the
+device on the head unit display.
+
+Sound output of the connected device should be redirected thru car audio device,
+input from the head unit should be redirected to the smartphone device.
+
+
+
+\subsection componentInterfacesRequiremetsOperationalInfrastructure Requirements placed on the Operational Infrastructure
+
+\li Access to graphical content of applications managed by the Window Management API.
+*/

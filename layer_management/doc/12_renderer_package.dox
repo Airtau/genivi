@@ -1,0 +1,116 @@
+/***************************************************************************
+*
+* Copyright 2012 BMW Car IT GmbH
+*
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*        http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*
+****************************************************************************/
+/*!
+
+\page rendererPackage Renderer Package
+
+\section rendererPackageOverview Overview
+
+The Layer Management Service does not provide rendering functionality on its own.
+The rendering of layers and their respective surfaces is always handled by
+rendering libraries. These are typically device dependant because of possible
+dependencies on graphics hardware or displays for example.
+
+A typical implementation of a renderer will use the pointer to the scene given
+in the constructor to access the list of current layers and their respective
+surfaces. In its own thread it will use the information in the scene to render
+its content. In most cases the renderer will need specific platform information for
+each surface in order to access the actual graphical content of the platform (e.g.
+native window handles or memory addresses). For this reason a renderer can append
+an instance of a subclass of the type PlatformSurface to a Surface object. This can
+be used to save information like window handles into these objects as these
+subclasses can be defined by the renderer implementation.
+
+An implementation of a renderer library must subclass BaseRenderer and implement
+the inherited start(), stop() and doScreenShot() methods, as well as a way to
+load the library dynamically at runtime.
+
+The layermanager searches the provided renderer shared library for two entry
+points, which are both mandatory for a renderer library. Their name is specified
+by the following naming scheme:
+
+
+\li \code BaseRenderer* create<Library_Name>(Scene*) \endcode
+\li \code void destroy<Library_Name>(<Library_Name>*) \endcode
+
+In order to be loadable by the layermanager, the created shared library must provide
+both of these functions.
+
+
+\section rendererPackageArchitecture Architecture Overview
+
+The reference renderer plugins are assembled using re-usable modules implementing
+different aspects like window systems or texture binders.
+
+\image html ./doc/images/example_renderer_wayland.png Renderer Architecture Overview
+\image latex ./doc/images/example_renderer_wayland.png Renderer Architecture Overview
+
+In order to implement a new renderer it often is sufficient to implement only a small
+amount of modules to switch to a different platform while using ready-to-use modules
+provided by the reference implementation.
+ 
+
+\section rendererPackageExample Example: Create the renderer library “MyRenderer”
+
+(1) Create the class MyRenderer, which inherits BaseRenderer
+
+(2) Implement the virtual class functions
+
+\li \code virtual bool start(void) \endcode
+\li \code virtual void stop(void) \endcode
+\li \code virtual void doScreenShot(std::string fileToSave) \endcode
+
+(3) Create the static functions (see example source code below)
+
+\li \code extern "C"
+BaseRenderer* createMyRenderer(Scene* pScene){
+    return new MyRenderer(pScene);
+}
+\endcode
+
+\li \code extern "C"
+void destroyMyRenderer(MyRenderer* pRenderer)
+{
+    delete pRenderer;
+}
+\endcode
+
+(4) Implement rendering of “MyRenderer”
+
+(5) Link the implementation to a shared library called “libMyRenderer.so”
+
+\section rendererPackageReferenceImplementation Reference Implementation
+
+The LayerManagement package contains two reference 
+implementations for renderers. One is based on OpenGL, the other is based
+on OpenGL ES 2.0. Both implementations rely on the X11 backend server.
+
+The source code for the OpenGL/X11-based reference renderer is available in the
+\code <package_root>/LayerManagerPlugins/Renderers/Platform/GLXRenderer \endcode
+directory.
+
+The source code for the OpenGL ES 2.0/X11-based reference renderer is available in the
+\code <package_root>/LayerManagerPlugins/Renderers/Platform/X11GLESRenderer \endcode
+directory.
+
+\section rendererPackagePublicInterface Public Interface
+
+The interface of the Renderer package is described in more detail in \ref RendererAPI.
+
+*/

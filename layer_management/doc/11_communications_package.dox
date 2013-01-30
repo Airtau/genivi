@@ -1,0 +1,126 @@
+/***************************************************************************
+*
+* Copyright 2012 BMW Car IT GmbH
+*
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*        http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*
+****************************************************************************/
+/*!
+
+\page communicationsPackage Communications Package
+
+\section communicationsPackageOverview Overview
+
+There is no direct communication to the Layer Management service. All communication
+must be performed through communication libraries loaded. These libraries can implement
+communication through middleware etc. The communication libraries encapsulate these
+dependencies and relay command objects similar to a command design pattern to the
+control component of the Layer Management Service. This way the service has no
+dependencies towards certain ways of communication and the usage of specific
+communication libraries can be decided at runtime.
+
+On the client side it is recommended to use the \ref ilmClient for communication
+with the LayerManagerService, or to be more precise, with the loaded Communicator Plugin
+of the LayerManagerService.
+The LayerManagment client library implements an abstraction layer hiding the technical
+details of the underlying communication technology.
+This enables client applications to be used with different communication technologies
+implemented in LayerManager Communicator plugins.
+
+\image html ./images/layer_management_communicator_structure.png Layer Manager Communicator Structure 
+\image latex ./images/layer_management_communicator_structure.png Layer Manager Communicator Structure 
+
+The general procedure for communicators is to establish their specific communication
+(IPC, proprietary method, specific bus etc) and provide the message interface described
+in chapter 6. When receiving commands on this communication channel the package builds
+one or more of the command objects described below and calls the execute method of the
+layermanager with these command objects. The command objects contain everything which
+is needed to execute the command, the parameters, the type of command etc. Changes to
+the list of layers and properties are then performed at a central point within the
+layermanager.
+
+An implementation of a communication library must subclass ICommunicator and
+implement the inherited start() and stop() methods, as well as a way to load the
+library dynamically at runtime.
+
+The layermanager searches the provided communicator shared library for two entry points,
+which are both mandatory for a communicator library. Their name is specified by the
+following naming scheme:
+
+\li \code ICommunicator* create<Library_Name>(ICommandExecutor*) \endcode
+\li \code void destroy<Library_Name>(<Library_Name>*) \endcode
+
+In order to be loadable by the layermanager, the created shared library must provide
+both of these functions.
+
+This component is to be provided by the platform supplier.
+
+The GENIVI Consortium does not mandate any specific implementation. The only constraint
+is that the proposed solution needs to fulfill the API specification. Furthermore each
+Communicator Implementation has to provide a C-API for the Client applications (like HMI,
+Browser, Navigation) to hide the used InterProcessCommunication scheme.
+
+\section communicationsPackageExample Example: Create the communication library “MyCommunicator”
+
+(1) Create the class MyCommunicator, which inherits ICommunicator
+
+(2) Implement the virtual class functions
+
+\li \code virtual bool start(void) \endcode
+\li \code virtual void stop(void) \endcode
+
+(3) Create the static functions (see example source code below)
+
+\li \code
+extern "C"
+ICommunicator* createMyCommunicator(ICommandExecutor* pExecutor)
+{
+    return new MyCommunicator(pExecutor);
+}
+\endcode
+
+\li \code
+extern "C"
+void destroyMyCommunicator(MyCommunicator* pCommunicator)
+{
+    delete pCommunicator;
+}
+\endcode
+
+(4) Implement communication layer of “MyCommunicator”
+
+(5) Link the implementation to a shared library called “libMyCommunicator.so”
+
+\section communicationsPackageReferenceImplementation Reference Implementation
+
+The LayerManagement package contains a reference 
+implementation for a communicator, which internally can use DBUS or TCP/IP.
+
+The source code is available in the
+\code <package_root>/LayerManagerPlugins/Communicators/GenericCommunicator \endcode
+directory.
+
+\section communicationsPackagePublicInterface Public Interface
+
+The interface of the Communicator package is described in more detail in \ref CommunicatorAPI.
+
+\section communicationsPackageClientInterface Client Interface
+
+The interface of the Layer Manager Client package is described in more detail in \ref ilmClient.
+
+\section communicationsPackageCommandObjectReference Command Object Reference
+
+The description of all available Layer Manager Commands is available in \ref Commands.
+
+*/

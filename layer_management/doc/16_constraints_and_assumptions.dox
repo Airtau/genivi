@@ -1,0 +1,46 @@
+/***************************************************************************
+*
+* Copyright 2012 BMW Car IT GmbH
+*
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*        http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*
+****************************************************************************/
+/*!
+
+\page constraintsAndAssumptions Constraints and Assumptions
+
+\section solutionConstraints Solution Constraints
+
+A completely platform independent solution is not possible due to the
+dependence on a specific platform for rendering and window management.
+The division of the Layer Management Service addresses this problem by
+having separate rendering packages for each target platform. The
+communication packages, main program and scene are not platform
+dependant. For maximum flexibility the communication and rendering
+packages must not be known at compile time of the rest of the Layer
+Management, i.e. they are loaded at runtime and integrated using a
+defined set of entry points.
+
+\section externalFactors External Factors
+
+When implementing rendering packages special care must be taken with
+respect to performance, because certain parts of the code will be
+executed at high frequency per second.
+
+\section assumptions Assumptions
+
+The Window Management API in use must provide access to the graphical
+content of individual applications for the rendering package.
+
+*/

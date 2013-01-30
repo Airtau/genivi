@@ -1,0 +1,119 @@
+Name: @PROJECT_NAME@
+Version: @DLT_VERSION@
+Release: @GENIVI_RPM_RELEASE@
+Summary: %{name} - Diagnostic Log and Trace
+Group: System Environment/Base
+Vendor: BMW Group AG
+License: @LICENSE@
+Source0: %{name}-%{version}.tar.gz
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+Requires: %{name} = %{version}-%{release}, pkgconfig
+
+%description
+This component provides a standardised log and trace interface, based on the
+standardised protocol specified in the AUTOSAR standard 4.0 DLT.
+This component can be used by GENIVI components and other applications as
+logging facility providing
+- the DLT shared library
+- the DLT daemon, including startup scripts
+- the DLT daemon adaptors
+- the DLT client console utilities
+- the DLT test applications
+
+
+%package doc
+Summary:        %{name} - Diagnostic Log and Trace: Documentation
+Group:          Documentation
+
+%description doc
+This component provides the documentation for %{name}.
+
+
+
+%package devel
+Summary:        %{name} - Diagnostic Log and Trace: Development files
+Group:          Development/Libraries
+Requires:       %{name} = %{version}-%{release}, pkgconfig
+
+%description devel
+This component provides the development libraries and includes for %{name}.
+
+
+%prep
+%setup -q
+
+
+
+%build
+rm -rf build
+mkdir -p build
+cd build
+#../configure --host=@HOST_TYPE@ --prefix=%{_prefix}
+#make
+cmake .. -DCMAKE_INSTALL_PREFIX=/usr
+make
+
+%install
+rm -rf $RPM_BUILD_ROOT
+cd build
+mkdir -p $RPM_BUILD_ROOT%{_bindir}
+make install DESTDIR=$RPM_BUILD_ROOT
+#/usr/bin/install -c -m 755 testscripts/Meego/dlt-daemon $RPM_BUILD_ROOT/etc/init.d
+
+
+%pre
+
+
+%post
+/sbin/ldconfig
+
+
+%postun
+/sbin/ldconfig
+
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+
+%files
+#/etc/init.d/dlt-daemon
+/etc/dlt-system.conf
+/etc/dlt.conf
+/usr/share/dlt-filetransfer/dlt-test-filetransfer-file
+/usr/share/dlt-filetransfer/dlt-test-filetransfer-image.png
+%{_libdir}/libdlt.so.@DLT_MAJOR_VERSION@
+%{_libdir}/libdlt.so.@DLT_VERSION@
+%{_libdir}/libdlt.so
+%{_bindir}/dlt-system
+%{_bindir}/dlt-convert
+%{_bindir}/dlt-receive
+%{_bindir}/dlt-adaptor-stdin
+%{_bindir}/dlt-adaptor-udp
+%{_bindir}/dlt-test-client
+%{_bindir}/dlt-test-user
+%{_bindir}/dlt-test-stress
+%{_bindir}/dlt-test-stress-client
+%{_bindir}/dlt-test-stress-user
+%{_bindir}/dlt-test-filetransfer
+%{_bindir}/dlt-test-multi-process
+%{_bindir}/dlt-test-multi-process-client
+
+%attr(0755,root,root) 
+%{_bindir}/dlt-daemon
+%{_bindir}/dlt-example-user
+%{_bindir}/dlt-example-user-func
+%{_bindir}/dlt-example-filetransfer
+
+
+%files doc
+%{_mandir}/man1/dlt-convert.1.gz
+%{_mandir}/man1/dlt-daemon.1.gz
+%{_mandir}/man1/dlt-receive.1.gz
+%{_mandir}/man1/dlt-system.1.gz
+%{_mandir}/man5/dlt-system.conf.5.gz
+%{_mandir}/man5/dlt.conf.5.gz
+
+%files devel
+%{_includedir}/dlt/*.h
+%{_libdir}/pkgconfig/@PROJECT_NAME@.pc

@@ -1,0 +1,14 @@
+3rdParty/.*
+LayerManagerClient/.*
+LayerManagerExamples/.*
+LayerManagerUtils/.*
+LayerManagerCommands/.*
+LayerManagerService/.*
+LayerManagerPlugins/Communicators/GenericCommunicator/.*
+LayerManagerPlugins/Renderers/.*
+LayerManagerPlugins/IpcModules/.*
+config/.*
+cmake/.*
+configure
+CMakeLists.txt
+LayerManager.spec.in

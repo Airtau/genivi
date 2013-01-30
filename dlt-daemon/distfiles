@@ -1,0 +1,13 @@
+CMakeLists.txt
+(src|include|wxctb|testscripts|doc).*CMakeLists.txt
+(src|include|wxctb|testscripts).*\.(cpp|h|c|cxx)
+include/dlt/.*(\.h|\.cpp|\.cmake)
+#testscripts/Ubuntu/.*(\.h|\.cpp|\.cmake)
+#testscripts/Meego/.*(\.h|\.cpp|\.cmake)
+#systemd/.*(\.h|\.cpp|\.cmake)
+automotive-dlt.spec.in
+[^/]*\.cmake
+src/daemon/dlt.conf
+src/system/dlt-system.conf
+src/tests/dlt-test-filetransfer-file
+src/tests/dlt-test-filetransfer-image.png

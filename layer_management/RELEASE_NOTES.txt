@@ -1,0 +1,419 @@
+next
+------------------
+Improvements:
+- removed LayerGroups, SurfaceGroups
+
+
+Version 0.9.9
+------------------
+This version includes the following enhancements.
+
+Bugfixes :
+- fixed warnings and errors with gcc 4.7.2
+- fixed uint array handling in DbusIpcModule
+- renamed global BIT(x) macro to resolve name collision
+
+Improvements:
+- added documentation for API split into ilmClient and ilmControl
+- input support for wayland with X11, DRI and FBDEV backends
+- support for wayland 1.0.0 API
+- GLES multitexture support
+- support for health monitoring based on systemd watchdog
+- added new debugging features to LayerManagerControl
+- improved logging configuration (set trace log level)
+- added logging of client binary name and process id
+- Dbus now uses private connection
+- code refactorings for signal-, configuration- and plugin-handling
+
+Version 0.9.8
+------------------
+This version includes the following enhancements.
+
+Bugfixes :
+- LayerManagement does not wake up every 100 ms anymore.
+- Serveral warning fixes for gcc 4.7.1,4.7.2
+- Removed GLESGraphicSystem Debug spams
+- fixed Signal Handling during shutdown
+- fixing Thread Safe Issue inside of the libDbusIpcModule
+
+
+Improvements:
+- Introducing Client Notifications for Layer and Surfaces
+- Introducing Layer and Surface Chroma Key Support
+- Introduced process name handling for each executed command
+- ilmClient: added check for response names
+- ilmClient: switching to open a private dbusConnection
+- Introducing PlugIn Base
+- added general health monitoring and a reference implementation on Systemd
+- added basic health monitoring on plugins
+
+Version 0.9.7
+-------------
+This version includes the following enhancements.
+
+Bugfixes :
+
+- fixes link script in example applications
+- Composition is not anymore forced for every redraw request
+- Example Script updated
+- ilmClient : documentation fixed
+- fix of several compiler warnings and memory leaks
+- fix several issues detected by coverity
+- fixing several warnings 
+- additional fixes inside of the reference compositor 
+- fixes a memory leak inside of generic communicator.
+
+Improvements:
+
+- X11 backend for wayland
+- DRM backend for wayland
+- Introducing generic communication approach
+- Introducing Communicator Reference Implementation based in tcp/ip sockets
+- Introducing generic hw layer support
+- Introducing default version handling
+- Introducing default toolchain file
+- Introducing SurfaceRemoveNativeContentCommand
+- Introducing new InputFramework and Example Applications
+- Profiling/Coverage options for gcc introduced
+- New features added to MockNavigation
+- New properties valuse added to layer/surfaceGetProperties
+- Adding new LayerManagerControl example program
+- Plugin will be now searched automatically in CMAKE_INSTALL_PREFIX location
+- Redundant Texture uploads removed
+- Activating Binary Shader support for platform dependent renderers
+- BaseGraphicSystem and BaseWindowSystems composition methods refactored
+- Wayland Backend is now running on wayland 0.95
+- Log has now diagnostic callback registration support
+- Imporving startup performance
+
+Version 0.9.6
+-------------
+This version includes the following enhancements.
+
+Bugfixes :
+
+- removed obsolete Commands.
+- added support for symbolic links to plugins.
+- Bugfix in GLXGraphicSystem Context has to be activated before beginLayer
+- Bug fixes in map/unmap window functions
+- Communciator plugins are now started after scene provider plugins
+
+Improvements:
+
+- Introducing DLT binding for Logging Framework
+- Introducing additional performance Counters
+- First version of Rendering Plugin for Wayland is introduced
+
+Version 0.9.5
+-------------
+This version includes the following enhancements.
+
+Bugfixes :
+
+- Compiler warnings have been removed.
+
+- Fixed missing initialization of default values.
+
+- EGLMockNavigation aspect ratio was hard coded, now uses
+  actual application resolution.
+
+
+Improvements:
+
+- Surface can be created without the native context of a
+  client application. The client can add its native content
+  later.
+
+- Command objects have been updated. Now theres a one to one
+  relationship between API calls and Command objects.
+
+- Build System generated header file with configuration options.
+  This replaced a series of compiler flags for defining symbols.
+
+- Updated/added new unit tests.
+
+- Added signal handling for clean shutdown ofLayerManagerService.
+  Now a stack trace is printed on crash.
+
+- Build System now defaults to "release" build type.
+
+- Logging improved.
+
+- Introduced ServiceConnect and ServiceDisconnect. This allows
+  detection of crashed client applications.
+
+- Renderer:
+  - Improved state handling of X11 window system.
+  - Renderer context sharing between different threads.
+  - Improved Shader handling.
+
+- Added auto-generation feature for LayerManager design
+  document (based on doxygen and latex).
+
+
+Version 0.9.4
+-------------
+This version includes the following enhancements.
+
+Bugfixes :
+
+- Removed Quiet Message, is not working with CMake 2.6
+
+- Bugfix fixes issue regarding layer source transformation
+  LayerSource Width should be considered with crop amount
+  Unit Test case added
+
+- Bugfix to establish rpm build with version tracking
+  Added newly created files to rpm
+  fix ILM VERSION for rpm, character '-' ist not allowed
+  in RELEASE variable, so now it is replaced by underscore
+
+- LayerManagerToolBox - remove wrong parameter parse
+ 
+
+Improvements:
+
+-   Add restrictions on adding a surface to a layer
+    This prevents:
+    1. A surface being added to multiple layers.
+    2. A surface being added to the same layer multiple times.
+-   New Example Application(EGLX11MockNavigation) added, 
+    which emulates 3D City 
+-   Input Events: better support of Qt: XMotionEvent need to be 
+    reported for Button1 to move sliders & scrollbars
+-   Adding new Command to set the hardware layertype during scene
+    creation        
+
+Version 0.9.3
+-------------
+This version includes the following enhancements.
+
+Bugfixes :
+- Bug fix in screenshot for layer & surface
+  Now a surface's screenshot will be exactly similar to the way it
+  appears on the screen currently (minus the effect of other surfaces
+  part of the same layer).
+- Multiple Bug fixes in X11WindowSystem
+  Use SwapBuffers only if something was drawn
+  Include SwapBuffers call while calculating FPS
+  ScreenshotOfDisplay should not check for any rendering changes
+  as it will not do a SwapBuffers after screenshot. 
+- Increase the framecounter only if the surface is rendered.
+- Removed several warnings
+- Fix to link the correct native graphic libraries.
+- skip rendering of fully cropped surfaces
+- adapt ilm client documentation
+
+Improvements:
+- Changing to LM_PLUGIN_DIR to LM_PLUGIN_PATH to be consitent
+- Changing dbus service name to be genivi compliant
+- DBUS Communicator could now run on System BUS too.
+
+
+Version 0.9.2
+-------------
+This version includes the following enhancements.
+
+Bugfixes:
+- Fixing DBUS Communicator tests to run and compile completely
+- Fixes source viewport rendering for layer
+- Fixing several compiler warnings  
+- Improved handling in case of render init failure
+- Fixing screenshot of surface.
+- Bug Fix for ILM command LayerAddSurface which was probably introduced during the large refactoring earlier
+- Small fix for better error checking & cleanup when acquiring X11 visuals fails
+
+Improvements:
+- Moving render specific base implementations to library
+- Add framework to support input events + X11 implementation
+- Enhance GLX Example Application to show the input handling
+- New Api method added, ilm_layerCreateDimension.
+- New Messages CreateLayerWithDimension, CreateLayerFromIdWithDimension introduced
+- Introducing new Class ViewportTransform
+- Introducing Example Implementation for SceneProvider Feature
+- Refactoring test framework
+- Introducing version tracking
+- LayerManagerToolbox can now used to take screenshots
+- Searchpath for Layermanager Plugins is now using the environment variable
+  LM_PLUGIN_DIR. The default value is /usr/lib/layermanager
+
+
+Version 0.9.1
+-------------
+
+This version includes the following enhancements.
+
+Bugfixes:
+- Remove spew introduced due to XDamage implementation
+- Allocate client buffer & damage only for surfaces that belong to a renderable layer
+- Compilation fix for DRAW_LAYER_DEBUG mode
+- Remove redundant GL calls in EGLX11ApplicationExample
+- Proper deinitilization of eglImage & texture handles
+- Texture will now bind correctly.
+- Race conditions and compositing startup fixed
+- Unmap Windows will no longer unredirected
+- Fixing wrong result value in ScreenshotCommand.
+- Reset unreferenced m_pReply message
+- Find of dbus architecture dependend files improved.
+- Layer Should only be rendered if visible
+- Remove apply of default values for Destination and Source Region
+- Initialize a graphical surface with non visible
+- Cleanup LayerManager Service at exit for a plugin initialization failure
+
+Improvements:
+- Improvement for handling, native X applications
+- LayerManagerToolBox introduced
+- Introducing default display environment, to avoid fail of service startup
+- SceneProvider feature added to load scenes on startup
+
+Version 0.9.0
+-------------
+
+This version includes the following enhancements.
+
+- complete code refactoring, introducing new library for commands.
+- Performance improvements XDamageSupport, only surface will be rendered which content has changed
+- Performance improvements Surface without alpha, will be rendered without blending
+- various stability improvements and bugfixes
+
+
+Version 0.8.1
+-------------
+
+This version includes the following enhancements.
+
+- bug fixes in X11GLESRenderer to get a clean shutdown on failure
+- force copy introduced for X11 Pixmaps in Open GL ES 2.0 Environments
+- CMakeLists.txt files fixed 
+
+Version 0.8.0
+-------------
+
+This version includes the following enhancements.
+
+- bug fixes in ilmClient API
+- added getLayerIdOfScreen interface in dbus communicator and ilmClient API
+
+
+Version 0.7.0
+-------------
+
+This version includes the following enhancements.
+
+- bug fixes in GLX Renderer regarding surface destroy
+- bug fixes in X11GLES Renderer regarding surface destroy
+
+
+Version 0.6.0
+-------------
+
+This version includes the following enhancements.
+
+- added GLX Renderer support for screen dump / surface dump / layer dump
+- added X11GLES Renderer support for screen dump / surface dump / layer dump
+
+
+Version 0.5.0
+-------------
+
+This version includes the following enhancements.
+
+- bug fixes in ilmClient API and dbus communicator
+- LayerManager types corrected
+- additional Messages introduced to support dump of screen, surfaces and layer to file
+
+
+Version 0.4.0
+-------------
+
+This version includes the following enhancements.
+
+Improved and added new interfaces between Renderer and LayerManagerService.
+
+
+Version 0.3.0
+-------------
+
+This version includes the following enhancements.
+
+Build Environment changed to cmake to fulfill the gnu make process.
+
+
+Version 0.2.2
+-------------
+Due to the requirements to support desktop, russelville and beagle board hardware. 
+A new LayerManagerRenderer will be upstreamed to support the russelville hardware and typical desktop pc hardware.
+
+This version includes the following enhancemnents
+
+* GLXApplicationExample - Rotating triangle which is registered to the service.
+* GLX Renderer Package to support Desktop PCs and the Russelvill Platform.
+* Platformdependent Makefiles Extensions (LayerManagerPlatform/MakeIGMA500.defs , LayerManagerPlatform/MakeDesktop.defs)
+
+
+Version 0.2.1
+-------------
+1. Minor Bugfix regarding DBUS Communicator 
+   getPorpertiesOfSurface and getPropertiesOfLayer
+   
+2. Code Cleanup in EGLX11ExampleApplication
+
+3. Skript GeniviDemo.sh added to run ExampleApplications out of the box 
+
+4. LayerManagerService handling of stopping all plugins improved
+
+5. Logging improved for several components
+
+Version 0.2.0
+-------------
+
+This version consist of new features and several bugfixes :
+
+1. C-API for the LayerManagement
+2. API enhancements
+3. Implementation of the open use case "Make a Screen Shot"
+4. Example applications
+5. Several bugfixes.
+
+1. C-API for the LayerManagement
+
+For better usage of the LayerManagement Service from application
+point of view an additional C-API is implemented (see LayerManagerClient/ilmClient).
+This API is deployed as shared libraries an can be linked to the application
+which will controll the service. For the internal communication between the client
+and the service D-BUS is used.
+
+2. API Enhancements
+
+To support hardware layers and to get a better interoperability with other applications
+and platforms the API was extended by the following features :
+
+* Layer and Surface and Group Ids can be applied by from the client side too.
+* IlmMatrix class is now available in the LayerManagerUtils library, to support
+  simple 3D / 2D transformations
+
+3. Implementation of the open use case "make a screen shot"
+
+The use case "make a screen shot" was still open and is now implemented
+with this release. 
+ 
+4. Example applications
+
+Several example applications were added to demonstrate the usage and capabilities of
+the service. 
+
+* EGLX11ApplicationExample - Rotating triangle which is registered to the service.
+* LayerManagementClientExample - Example for controlling the service and the rendered layers.
+* LayerSceneDescriptionExample - Example for the definition of external layer and surface ids.
+
+5. Several bugfixes
+
+* Race condition during access/creation/deletion of data in layer list removed.
+* Layer and surface compositing in GLESGraphicSystem improved
+* Issue for handling of not applied surface in X11WindowSystem removed
+* Stability improvements
+* Improvement of the build environemt     
+
+Version 0.1.0
+-------------
+Initial published Version.

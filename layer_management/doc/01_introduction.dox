@@ -1,0 +1,54 @@
+/***************************************************************************
+*
+* Copyright 2012 BMW Car IT GmbH
+*
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*        http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*
+****************************************************************************/
+/*!
+
+\page Introduction Introduction
+
+\section purpose Purpose
+The OEMs within the GENIVI Alliance have been discussing the concept of IVI profiles. The full
+range of IVI products would be categorised into a number of profiles. A profile would describe
+the “commodity” functionality within a product segment. Commodity is defined as functionality
+that is common across the contributing OEMs or functionality that is delivered in a comparable
+after market consumer device.
+
+The creation of profiles is intended to provide a consistent product target for silicon vendors
+and GENIVI platform distributors, enabling cost optimisation by the scaling of both the target
+processor silicon and GENIVI platform distribution.
+
+\image html ./doc/images/purpose_genivi.png Commodity feature and differentiation
+\image latex ./doc/images/purpose_genivi.png Commodity feature and differentiation
+
+This document identifies the areas of “commodity” features and provides a description of the
+required functionality. The document will be maintained and further developed within the GENIVI
+Strategy Council planning work group.
+
+The GENIVI System Architecture Team (SAT) will use the profile descriptions to scope the technical capabilities
+of the GENIVI platform. The decomposition / further detailing of this document will carried out
+iteratively between the SC planning group and the SAT.
+
+The commodity functionality within the profiles will describe the functionality to be supported
+by the GENIVI Reference implementation.
+
+
+\section purposeDocument Purpose of this document
+
+This document contains the detailed design of the Layer Management Service component identified
+with sufficient detail to allow coding of this component.
+
+*/

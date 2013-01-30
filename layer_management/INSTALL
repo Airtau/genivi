@@ -1,0 +1,22 @@
+This file describes installing Layer Manager software
+on various platforms. This document is largely centered
+around the GENIVI baseline so it will mostly have a 
+description that is relevant to the baseline. It won't
+cover other platforms.
+
+Installing on OMAP 3 with Ubuntu OS
+---
+Here are the details of the particular target;
+uname: Linux ubuntu 2.6.38-8-omap #42-Ubuntu Mon Apr 11 12:45:46 UTC 2011 armv7l armv7l armv7l GNU/Linux
+cmake: cmake version 2.8.3
+dbus:
+
+These should all be consider pre-requisites;
+
+1. cmake (build tool)
+2. dbus
+3. libdus-1-dev
+4. xserver-xorg-core
+5. libgles1-sgx-omap3
+6. libgles2-mesa libgles2-mesa-dev
+7. libxcomposite-dev

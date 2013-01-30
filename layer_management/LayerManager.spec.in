@@ -1,0 +1,97 @@
+Name: 			@PROJECT_NAME@
+Summary: 		LayerManager
+Version: 		@GENIVI_PROJECT_VERSION@
+Release: 		@GENIVI_RPM_RELEASE@
+License: 		@LICENSE@
+Group: 			System Environment / Base
+Vendor: 		BMW AG
+Source: 		%{name}-%{version}.tar.gz
+#BuildRequires: pthread
+#Requires: 		pthread
+BuildRoot: 		%{_tmppath}/%{name}-%{version}-%{release}-root
+
+%description
+Layermanager
+
+%prep
+%setup -q
+echo "building layermanager"
+
+%package layermanager 
+Summary: Layermanager
+Group: System Environment / Base
+Requires: %{name} = %{version}-%{release}
+
+%description layermanager
+Layermanager
+
+%build
+rm -rf build
+mkdir -p build 
+cd build
+../configure --host=@HOST_TYPE@ --prefix=%{_usr}
+make
+
+%install
+rm -rf $RPM_BUILD_ROOT
+cd build
+mkdir -p $RPM_BUILD_ROOT%{_libdir}/layermanager/communicator
+make install DESTDIR=$RPM_BUILD_ROOT
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%files
+%defattr(-,root,root)
+%dir %_bindir
+%{_bindir}/LayerManagerService
+%dir %_includedir/layermanager
+%{_includedir}/layermanager/*
+%dir %_libdir/layermanager
+%{_libdir}/layermanager/libLayerScene.so
+%dir %_libdir/layermanager/communicator
+%{_libdir}/layermanager/communicator/libGenericCommunicator.so
+%{_libdir}/layermanager/ipcmodules/*.so
+%{_libdir}/libIpcModuleLoader.so
+%{_libdir}/libLayerManagerCommands.so
+%{_libdir}/libLayerManagerGraphicGLESv2.so
+%dir %_libdir/layermanager/renderer
+%{_libdir}/layermanager/renderer/libX11GLESRenderer.so
+%{_libdir}/layermanager/renderer/renderer_frag.glslf
+%{_libdir}/layermanager/renderer/renderer_frag_no_ualpha.glslf
+%{_libdir}/layermanager/renderer/renderer_vert.glslv
+%dir %_libdir/layermanager/static
+%{_libdir}/layermanager/static/libLayerManagerUtils.a
+
+%dir %_includedir/ilm
+%{_includedir}/ilm/*
+%{_libdir}/libilmClient.so
+
+%{_bindir}/EGLX11ApplicationExample
+%{_bindir}/LayerManagerClientExample
+%{_bindir}/LayerManagerControl
+%{_bindir}/EGLX11MockNavigation
+
+/etc/dbus-1/session.d/LayerManagerService.conf
+/etc/dbus-1/system.d/LayerManagerService.conf
+
+
+%changelog
+* Thu Nov 28 2012 Timo Lotterbach <Timo.Lotterbach@bmw-carit.de> 0.9.9
+- removed LayerManagerToolBox
+* Mon Jun 11 2012 Timo Lotterbach <Timo.Lotterbach@bmw-carit.de> 0.9.6
+- added IpcModules
+- added IpcModuleLoader
+* Fri Aug 26 2011 Michael Schuldt <Michael.Schuldt@bmw-carit.de> 0.9.1
+- Missing install target for libLayerManagerGraphicGLESv2.so added
+- Missing install target for LayerManagerService.conf added
+* Fri Jun 10 2011 Michael Schuldt <Michael.Schuldt@bmw-carit.de> 0.9.0
+- Missing install target for LayerManagerToolBox added
+* Fri Jun 10 2011 Michael Schuldt <Michael.Schuldt@bmw-carit.de> 0.8.1
+- Missing install target for renderer_frag_no_ualpha.glslf added
+* Tue May 24 2011 Timo LOTTERBACH <timo.lotterbach@bmw-carit.de> 0.8.1
+- Added new library LayerManagerCommands
+- Added new shader for optimization
+
+* Tue Mar 3 2011 Jonathan CONRAD <jonathan.conrad@bmw-carit.de> 0.3.0
+- Creation

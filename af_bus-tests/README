@@ -1,0 +1,21 @@
+Test suite for AF_BUS sockets
+
+Introduction
+============
+
+The test suite is composed of unit tests that check that all the
+possible BSD sockets primitives are working for AF_BUS sockets
+(socket, bind, getsockname, connect, listen, poll), unicast and
+multicast send and receive and AF_BUS specific operations such
+as adding and removing AF_BUS addresses to a socket, adding
+match rules, passing file descriptors, increasing sending buffer
+size and eavesdropping.
+
+Configuration
+=============
+
+af_bus-tests can be build using autotools.
+
+the tests can be executed with the following command:
+
+$ make check

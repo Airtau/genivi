@@ -1,0 +1,56 @@
+/***************************************************************************
+*
+* Copyright 2012 BMW Car IT GmbH
+*
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*        http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*
+****************************************************************************/
+/*!
+
+\page testing Testing
+
+\section testingOverview Overview
+
+All packages (Communicator, Renderers, Scene and Layermanager) must be tested on
+their own. The division of the Layer Management Service into these packages
+provides an easy usage of black box testing.
+
+For a smoke test based approach constellations of communicator packages and
+renderers can be tested by starting up the Layer Management, inserting automated
+messages into the communicator channel and comparing the rendered result to the
+desired output or resulting changes.
+
+\section testingCommunicator Communicator
+
+All communicator packages
+should be black box tested by configuring the communicator package under test
+with a mock Layer Management, then using the provided communicator channel it
+should be verified, that received messages result in “execute” calls to the Layer
+Management. This way the wanted functionality of communicator packages can be
+tested fully.
+
+\section testingRenderers Renderers
+
+In a similar way, renderers can be tested by providing certain constellations of
+layers, surfaces and their properties in a mock Layerlist. This mock layerlist is
+then given to the renderer under test and then checking for the desired output of
+the renderer (positioning, overlapping, transparency etc).
+
+\section testingScene Scene
+
+The implementation of the Scene can also be tested by automatic tests,
+inserting new layers and surfaces, then changing properties and comparing
+the results of subsequent calls to getter methods with the desired values.
+
+*/

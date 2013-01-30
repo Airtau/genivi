@@ -1,0 +1,302 @@
+Sections in this file describe:
+- Introduction
+- Component Overview
+- Required platform capabilities
+- How to build on different platforms
+- Change the environment during Runtime
+- Running Testapplications
+
+
+Introduction
+====================================
+In the automotive domain, the most HMI systems are using their own window manager implementation. 
+Many applications (e.g. navigation, reversing camera) are implemented standalone and 
+therefore one service is used to composite all applications to the final image on the screen. This Service
+is also know as LayerManagement. 
+This Component provides a common API and a proof-of-concept implementation for the Layer Management Service. 
+This service should improve the existing vendor-specific layer management implementations 
+which have the following features :
+
+    * Fixed number of hardware layers
+    * Hardware accelerated compositing
+    * Platform dependent
+    * Number of layers not extensible during runtime
+    * Vendor-specific implementation
+    * No standardized interface
+    * Hardware dependent
+    * No change during runtime possible 
+
+The IVI Layer Management have the following enhancements :
+
+    * Well-defined interface
+    * Standardized compositing
+    * Convenient and consistent access to hardware accelerated modules
+    * Separation of HMI and Layer Management
+    * Dynamically Extensions during runtime
+    * Low integration complexity
+    * Reduced dependency on hardware 
+
+Component Overview
+====================================
+The IVI Layer Management consist of three subcomponents.
+
+The LayerManagementService
+===
+This is the main component which controls and handles
+the different layers with its content. Furthermore he
+will execute the commands which are deployed by the corresponding
+communicator. The content of the different layers are deployed to the
+renderer.  
+
+The LayerManagementCommunicator
+===
+This subcomponent will handle the LayerManagement API messages. Generally
+a communicator will establish the communication between application and the
+LayerManagementService. The concept behind the communicator is to abstract
+the required ipc mechanism on the target platform. 
+
+The LayerManagementRenderer
+===
+This subcomponent will handle the rendering of the different layers and its content on the
+final used target platform. The concept behind the renderer is to abstract
+the required rendering mechanism on the target platform. 
+
+Required Platform capabilities
+====================================
+
+Platform with X11 and OpenGL ES 2.0
+===
+
+If you have choosen the X11GLESRenderer as rendering backend, then the following
+Extensions have to be supported by the TargetPlatform :
+
+X11 Extensions:
+
+x-composite : This extension should support redirecting of egl Surfaces to x11 pixmaps too.
+x-damage
+
+EGL / OpenGL ES 2.0:
+
+EGL_IMAGE_KHR : 
+The following functions should be supported by the vendor specific graphic driver
+glEGLImageTargetTexture2DOES
+eglCreateImageKHR
+eglDestroyImageKHR
+Furthermore it should be supported to create an egl image from an x11 pixmap.  
+
+Platform with X11 and OpenGL
+===
+
+If you have choosen the GLXRenderer as rendering backend, then the following
+Extensions have to be supported by the TargetPlatform :
+
+X11 Extensions:
+
+x-composite : This extension should support redirecting of egl Surfaces to x11 pixmaps too.
+x-damage    : This extension is required to render surfaces only, if there content has changed.
+
+GLX / OpenGL :
+
+GLX_TEXTURE_FROM_PIXMAP : 
+The following functions should be supported by the vendor specific graphic driver
+Furthermore it should be supported to create an texture from an x11 pixmap.  
+
+
+How to build on different platforms
+====================================
+
+These conditions need to be met in order to build the LayerManager component:
+
+- CMake required (version 2.6 or higher)
+
+Building the LayerManager breaks down to the following steps:
+
+1. Pull the current codebase from the git repository to your target source directory [referred to as <source-dir>]
+
+   Example: git clone https://git.genivi.org/srv/git/layer_management
+
+   This should give you a directory called "layer_management" in your current directory.
+
+2. Create a build directory, e.g. IVILayerManagement_build [referred to as <build-dir>]
+
+   Example: mkdir IVILayerManagement_build
+
+3. In <build-dir> Generate build system for your platform using CMake.
+   This step provides some customization options to configure build options.
+
+   Example: cd <build-dir>
+            cmake <source-dir> [optional_build_options]
+   
+   For a full list of available build options in [optional_build_options] see "Supported Build Options"   
+
+4. Start the build.
+
+   Example: make
+
+5. Install LayerManager on local system.
+   Note: This step will require root priviledges on most systems.
+
+   Example: sudo make install
+
+The LayerManager may now be started by calling "LayerManagerService".
+
+Needed Libraries
+===
+
+You need both development packages and libraries for
+
+LayerManagerService
+--
+libdbus-1-dev
+
+X11GLESRenderer:
+--
+Core X11 libraries
+X11 Composite libraries
+
+Vendor specific EGL 1.4 Libraries, which are support the EGL_IMAGE_KHR Extension including
+build an EGL Image from X11Pixmap
+Vendor specific OpenGL ES 2.0 Libraries, with JIT compiler to support shader which are
+delivered as source code
+
+X11Renderer:
+---
+Core X11 libraries
+X11 Composite libraries
+
+OpenGL 1.1
+GLX
+
+Supported Build Options
+===
+
+- Build configuration:
+  Option: -DCMAKE_BUILD_TYPE=Debug or
+          -DCMAKE_BUILD_TYPE=Release
+
+- Build for X11 Desktop with OpenGL / GLX Renderer
+  Option: -DWITH_DESKTOP=ON or
+          -DWITH_DESKTOP=OFF
+
+- Build for X11 with OpenGL ES 2.0 Renderer
+  Option: -DWITH_X11_GLES=ON or
+          -DWITH_X11_GLES=OFF
+          
+- Build EGL examples
+  Option: -DWITH_EGL_EXAMPLE=ON or
+          -DWITH_EGL_EXAMPLE=OFF
+
+- Build OpenGL / GLX examples
+  Option: -DWITH_GLX_EXAMPLE=ON or
+          -DWITH_GLX_EXAMPLE=OFF
+          
+- Build Client examples
+  Option: -DWITH_CLIENT_EXAMPLES=ON or
+          -DWITH_CLIENT_EXAMPLES=OFF
+          
+- Build with copy of textures for target platform which does not support the
+  GLX_TEXTURE_FROM_PIXMAP or EGL_IMAGE_KHR on X11 pixmaps Extensions
+  Option: -DWITH_FORCE_COPY=ON or
+          -DWITH_FORCE_COPY=OFF
+
+- Build available tests
+  Option: -DWITH_TESTS=ON or
+          -DWITH_TESTS=OFF
+
+  Remark: Test File are currently not upstreamed.	
+
+- Build for different Platforms
+
+  You have the choice to use GLXRenderer or X11GLESRenderer.
+
+  GLXRenderer (X11Renderer.so) which is normaly used for a Desktop, VMWare Image and GMA500 based Headunits
+
+  cmake <source-dir>/ -DWITH_DESKTOP=ON -DWITH_GLX_EXAMPLE=ON -DWITH_TESTS=OFF -DWITH_EGL_EXAMPLE=OFF -DWITH_X11_GLES=OFF
+
+  X11GLESRenderer which is used on more embedded device which are supporting EGL and OpenGL ES 2.0
+
+  cmake <source-dir>/ -DWITH_DESKTOP=OFF -DWITH_GLX_EXAMPLE=OFF -DWITH_TESTS=OFF -DWITH_EGL_EXAMPLE=ON -DWITH_X11_GLES=ON
+
+Change the Environment during Runtime
+=====================================
+The following environments can be set to change the runtime behaviour.
+
+LM_PLUGIN_PATH          set the path for the location of communicator and renderer PlugIns 
+                        default : /usr/lib/layermanager
+                        Example : export LM_PLUGIN_PATH= /usr/local/lib/layermanager
+
+LM_USE_SESSION_BUS      enables the DBUS communication to run on Session bus instead of Systembus
+                        default : disabled run on system bus
+                        Example : export LM_USE_SESSION_BUS=enable
+                        
+Commandline parameter :
+LayerManagerService : -w<horizontalresolution> - default 1280
+                      -h<verticalresolution> - default 480
+                      -c<console debug level> - default 2 (only errors and info)
+                      -f<file debug level> - default 0 (disabled) log file location is /tmp/LayerManagerService.log
+                      possible debug levels :   0 disabled
+                                                1 errors
+                                                2 info,errors
+                                                3 info,errors, warnings
+                                                4 info,errors, warnings,debug
+                      -v shows version of layermanager
+
+Running Testapplications
+=====================================
+
+1. Starting the service
+
+precondition : 
+
+install prefix is /usr/local
+no compositing manager is running like openbox xfce metacity, kill these if needed
+
+run:
+#> export DISPLAY=:0
+#> export LD_LIBRARY_PATH=/usr/local/lib:/usr/lib
+#> export LM_PLUGIN_PATH=/usr/local/lib/layermanager
+#> LayerManagerService &
+
+2. Running OpenGL / OpenGL ES 2.0 Example Applications
+
+precondition : 
+
+install prefix is /usr/local
+LayerManagerService Running
+
+run:
+#> export DISPLAY=:0
+#> export LD_LIBRARY_PATH=/usr/local/lib:/usr/lib
+OpenGL ES Example
+#> EGLX11ApplicationExample &
+OpenGL Example
+#> GLX11ApplicationExample &
+
+3. Running LayerManagerControl
+
+The LayerManagerControl can be used to change and debug 
+the runtime behaviour of the service.
+
+Please Call :
+LayerManagerControl without arguments to see a list of supported commands
+
+Examples
+        LayerManagerControl get scene
+        LayerManagerControl get layers
+        LayerManagerControl get layer 1000
+        LayerManagerControl get surfaces
+        LayerManagerControl get surface 0xa
+        LayerManagerControl analyze surface 10
+        LayerManagerControl scatter
+        LayerManagerControl watch surface 0xa
+
+precondition : 
+
+install prefix is /usr/local
+LayerManagerService Running
+
+run:
+#> export DISPLAY=:0
+#> export LD_LIBRARY_PATH=/usr/local/lib:/usr/lib
+#> LayerManagerControl [command]
+
